@@ -17,6 +17,7 @@
 #include <atomic>
 #include <gsl/span>
 
+#ifndef NO_SYSTEM_UUID
 #ifdef _WIN32
 #include <objbase.h>
 
@@ -31,6 +32,7 @@
 #include <uuid/uuid.h>
 #elif defined(__APPLE__)
 #include <CoreFoundation/CFUUID.h>
+#endif
 #endif
 
 namespace uuids
@@ -598,7 +600,7 @@ namespace uuids
    // --------------------------------------------------------------------------------------------------------------------------
    // uuid generators
    // --------------------------------------------------------------------------------------------------------------------------
-
+#ifndef NO_SYSTEM_UUID
    class uuid_system_generator
    {
    public:
@@ -693,6 +695,7 @@ namespace uuids
 #endif
       }
    };
+#endif
 
    template <typename UniformRandomNumberGenerator>
    class basic_uuid_random_generator 
@@ -810,6 +813,7 @@ namespace uuids
       detail::sha1 hasher;
    };
 
+#ifdef EXPERIMENTAL_TIME_GENERATOR
    // !!! DO NOT USE THIS IN PRODUCTION
    // this implementation is unreliable for good uuids
    class uuid_time_generator
@@ -891,6 +895,7 @@ namespace uuids
          return {};
       }
    };
+#endif
 }
 
 namespace std
